@@ -1,0 +1,5 @@
+<ul *ngIf="emojiList" class="emoji-list">
+  <li class="emoji-list__item" *ngFor="let emoji of emojiList" (click)="onSelect(emoji)">
+    <app-emoji-item [emoji]="emoji" [selected]="emoji === selectedEmoji"></app-emoji-item>
+  </li>
+</ul>
