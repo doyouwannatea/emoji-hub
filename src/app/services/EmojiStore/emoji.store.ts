@@ -159,10 +159,10 @@ export class EmojiStore {
 
   unlikeEmoji(unlikedEmoji: Emoji): void {
     const { favorite: favoriteEmojis } = this.state.value.emojis;
-    unlikedEmoji.liked = false;
     this.setFavoriteEmojis(
       favoriteEmojis.filter((emoji) => unlikedEmoji !== emoji)
     );
+    unlikedEmoji.liked = false;
     this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
