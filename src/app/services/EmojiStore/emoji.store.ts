@@ -158,11 +158,13 @@ export class EmojiStore {
   }
 
   unlikeEmoji(unlikedEmoji: Emoji): void {
-    const { favorite: favoriteEmojis } = this.state.value.emojis;
+    const { favorite: favoriteEmojis, all: allEmojis } =
+      this.state.value.emojis;
     this.setFavoriteEmojis(
-      favoriteEmojis.filter((emoji) => unlikedEmoji !== emoji)
+      favoriteEmojis.filter((emoji) => unlikedEmoji.name !== emoji.name)
     );
-    unlikedEmoji.liked = false;
+    const emoji = allEmojis.find((emoji) => unlikedEmoji.name === emoji.name);
+    if (emoji) emoji.liked = false;
     this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
@@ -171,7 +173,9 @@ export class EmojiStore {
 
     deletedEmoji.deleted = true;
     this.state.value.emojis.deleted.push(deletedEmoji);
-    this.setAllEmojis(allEmojis.filter((emoji) => deletedEmoji !== emoji));
+    this.setAllEmojis(
+      allEmojis.filter((emoji) => deletedEmoji.name !== emoji.name)
+    );
     this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
@@ -181,7 +185,7 @@ export class EmojiStore {
     restoredEmoji.deleted = false;
     this.state.value.emojis.all.push(restoredEmoji);
     this.setDeletedEmojis(
-      deletedEmojis.filter((emoji) => restoredEmoji !== emoji)
+      deletedEmojis.filter((emoji) => restoredEmoji.name !== emoji.name)
     );
     this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
