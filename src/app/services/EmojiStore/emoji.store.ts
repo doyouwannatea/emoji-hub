@@ -5,11 +5,6 @@ import { BehaviorSubjectItem } from 'src/app/helpers/BehaviorSubjectItem';
 import { EmojiList, Emoji } from 'src/types/Emoji';
 import { EmojiService } from '../EmojiService/emoji.service';
 
-// [x] TODO при нажатии на [*] эмоджи добавляется в список любимых и меняет иконку на более яркую
-// [x] при обновлении страницы состояние списков должно сохранятся
-// [x] при наведении на превью эмоджи должна всплывать полноразмераная картинка
-// [ ] рефакторинг стилей и кода
-
 export interface Emojis {
   initial: EmojiList;
   all: EmojiList;
