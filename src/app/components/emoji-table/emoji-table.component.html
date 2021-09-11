@@ -1,5 +1,5 @@
 <div *ngIf="emojiList" class="table-responsive">
-  <table class="table table-striped">
+  <table class="table">
     <thead>
       <tr>
         <th>имя</th>
@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let emoji of emojiList">
+      <tr *ngFor="let emoji of emojiList" [class.liked]="emoji.liked">
         <th>{{ emoji.name }}</th>
         <td>
           <a [href]="emoji.url" target="_blank">{{ emoji.url }}</a>
@@ -19,28 +19,24 @@
             <img [src]="emoji.url" class="table__preview table__preview--full" style="width: 64px; height: 64px;"
               alt="">
           </ng-template>
-          <img [ngbTooltip]="tipContent" tooltipClass="image-tooltip" [class.liked]="emoji.liked" [src]="emoji.url"
-            alt="" class="table__preview">
+          <img [ngbTooltip]="tipContent" tooltipClass="image-tooltip" [src]="emoji.url" alt="" class="table__preview">
         </td>
         <td>
           <div *ngIf="!emoji.liked && !emoji.deleted" class="d-flex gap-1 flex-wrap">
             <button title="delete" (click)="emojiStore.deleteEmoji(emoji)"
-              class="table__btn btn btn-outline-secondary btn-sm w-100">
+              class="table__btn btn btn-outline-secondary btn-sm flex-grow-1">
               <span class="icon" style="background-image: url(../../../assets/icons/trash.svg);"></span>
-              <span class="text">удалить</span>
             </button>
             <button title="like" (click)="emojiStore.likeEmoji(emoji)"
-              class="table__btn btn btn-outline-secondary btn-sm w-100">
+              class="table__btn btn btn-outline-secondary btn-sm flex-grow-1">
               <span class="icon" style="background-image: url(../../../assets/icons/like.svg);"></span>
-              <span class="text">в любимое</span>
             </button>
           </div>
 
           <div *ngIf="emoji.liked">
             <button title="unlike" (click)="emojiStore.unlikeEmoji(emoji)"
-              class="table__btn btn btn-outline-secondary btn-sm w-100">
+              class="d-flex justify-content-center btn btn-outline-secondary btn-sm w-100">
               <span class="icon" style="background-image: url(../../../assets/icons/unlike.svg);"></span>
-              удалить из любимого
             </button>
           </div>
 

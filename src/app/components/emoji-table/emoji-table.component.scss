@@ -8,6 +8,10 @@
     table-layout: auto;
   }
 
+  tr.liked {
+    background-color: #d8ffd9;
+  }
+
   td {
     overflow-wrap: break-word;
   }
@@ -15,11 +19,6 @@
   &__preview {
     width: 25px;
     height: 25px;
-    opacity: 0.5;
-
-    &.liked {
-      opacity: 1;
-    }
 
     &--full {
       opacity: 1;
