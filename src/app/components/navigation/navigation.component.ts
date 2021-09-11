@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EmojiTabs } from 'src/types/Emoji';
 
@@ -7,7 +7,7 @@ import { EmojiTabs } from 'src/types/Emoji';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit {
   activeTab: string = EmojiTabs.all;
 
   constructor(private activatedRoute: ActivatedRoute) {}
