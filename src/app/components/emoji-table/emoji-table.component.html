@@ -23,17 +23,30 @@
             alt="" class="table__preview">
         </td>
         <td>
-          <div *ngIf="!emoji.liked && !emoji.deleted">
-            <button (click)="emojiStore.deleteEmoji(emoji)" class="btn btn-primary">x</button>
-            <button (click)="emojiStore.likeEmoji(emoji)" class="btn btn-primary">*</button>
+          <div *ngIf="!emoji.liked && !emoji.deleted" class="d-flex gap-1 flex-wrap">
+            <button title="delete" (click)="emojiStore.deleteEmoji(emoji)"
+              class="table__btn btn btn-outline-secondary btn-sm w-100">
+              <span class="icon" style="background-image: url(../../../assets/icons/trash.svg);"></span>
+              <span class="text">удалить</span>
+            </button>
+            <button title="like" (click)="emojiStore.likeEmoji(emoji)"
+              class="table__btn btn btn-outline-secondary btn-sm w-100">
+              <span class="icon" style="background-image: url(../../../assets/icons/like.svg);"></span>
+              <span class="text">в любимое</span>
+            </button>
           </div>
 
           <div *ngIf="emoji.liked">
-            <button (click)="emojiStore.unlikeEmoji(emoji)" class="btn btn-primary">x</button>
+            <button title="unlike" (click)="emojiStore.unlikeEmoji(emoji)"
+              class="table__btn btn btn-outline-secondary btn-sm w-100">
+              <span class="icon" style="background-image: url(../../../assets/icons/unlike.svg);"></span>
+              удалить из любимого
+            </button>
           </div>
 
           <div *ngIf="emoji.deleted">
-            <button (click)="emojiStore.restoreEmoji(emoji)" class="btn btn-primary">восстановить</button>
+            <button (click)="emojiStore.restoreEmoji(emoji)"
+              class="btn btn-outline-success btn-sm w-100">восстановить</button>
           </div>
         </td>
       </tr>
