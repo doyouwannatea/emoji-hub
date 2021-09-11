@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { EmojiService } from 'src/app/services/EmojiService/emoji.service';
 import { EmojiStore } from 'src/app/services/EmojiStore/emoji.store';
 
 @Component({
@@ -8,8 +7,5 @@ import { EmojiStore } from 'src/app/services/EmojiStore/emoji.store';
   styleUrls: ['./favorite-emojis-page.component.scss'],
 })
 export class FavoriteEmojisPageComponent {
-  constructor(
-    public emojiService: EmojiService,
-    public emojiStore: EmojiStore
-  ) {}
+  constructor(public emojiStore: EmojiStore) {}
 }

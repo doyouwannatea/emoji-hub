@@ -15,6 +15,7 @@ import { Emojis } from '../EmojiStore/emoji.store';
 export class EmojiService {
   private emojisUrl = 'https://api.github.com/emojis';
   loading = new BehaviorSubjectItem(false);
+  error = new BehaviorSubjectItem(false);
 
   constructor(private http: HttpClient) {
     this.fetchEmojis();
@@ -22,11 +23,12 @@ export class EmojiService {
 
   fetchEmojis(): Observable<EmojiList> {
     this.loading.value = true;
+    this.error.value = false;
     let result$: Observable<EmojiList>;
 
     if (environment.mockEmojis) {
       result$ = of(mockEmojiMap).pipe(
-        delay(1000),
+        delay(2000),
         catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
         map(emojiMapToList),
         map((emojiList) => emojiList.map((emoji) => new Emoji(emoji)))
@@ -62,6 +64,7 @@ export class EmojiService {
    */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
+      this.error.value = true;
       console.error(error); // log to console instead
       console.log(`${operation} failed: ${error.message}`);
       return of(result as T);

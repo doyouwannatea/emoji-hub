@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { EmojiService } from 'src/app/services/EmojiService/emoji.service';
 import { EmojiList } from 'src/types/Emoji';
 
 @Component({
@@ -8,6 +9,7 @@ import { EmojiList } from 'src/types/Emoji';
 })
 export class EmojisPageComponent {
   @Input() emojiList: EmojiList | null = [];
-  @Input() loading: boolean | null = false;
   @Input() title = '';
+
+  constructor(public emojiService: EmojiService) {}
 }
