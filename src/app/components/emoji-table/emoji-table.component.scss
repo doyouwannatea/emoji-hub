@@ -4,14 +4,17 @@
 
   &__preview {
     width: 25px;
+    height: 25px;
     opacity: 0.5;
-
-    &::before {
-      content: "not found";
-    }
 
     &.liked {
       opacity: 1;
+    }
+
+    &--full {
+      opacity: 1;
+      width: 64px;
+      height: 64px;
     }
   }
 }

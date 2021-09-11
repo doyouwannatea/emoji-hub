@@ -15,7 +15,12 @@
           <a [href]="emoji.url" target="_blank">{{ emoji.url }}</a>
         </td>
         <td>
-          <img [class.liked]="emoji.liked" [src]="emoji.url" alt="" class="table__preview mr-2">
+          <ng-template #tipContent>
+            <img [src]="emoji.url" class="table__preview table__preview--full" style="width: 64px; height: 64px;"
+              alt="">
+          </ng-template>
+          <img [ngbTooltip]="tipContent" tooltipClass="image-tooltip" [class.liked]="emoji.liked" [src]="emoji.url"
+            alt="" class="table__preview">
         </td>
         <td>
           <div *ngIf="!emoji.liked && !emoji.deleted">
