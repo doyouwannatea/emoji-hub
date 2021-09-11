@@ -7,6 +7,7 @@ import { emojiMapToList } from 'src/app/helpers/emojiMapToList';
 import { mockEmojiMap } from 'src/app/mocks/mock-emoji-map';
 import { environment } from 'src/environments/environment';
 import { Emoji, EmojiList, EmojiMap } from 'src/types/Emoji';
+import { Emojis } from '../EmojiStore/emoji.store';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,17 @@ export class EmojiService {
 
     result$.subscribe(() => (this.loading.value = false));
     return result$;
+  }
+
+  saveEmojisToLocalStorage(emojis: Emojis) {
+    localStorage.setItem('emojis', JSON.stringify(emojis));
+  }
+
+  getEmojisFromLocalStorage(): Emojis | null {
+    const emojisString = localStorage.getItem('emojis');
+    if (!emojisString) return null;
+
+    return JSON.parse(emojisString);
   }
 
   /**

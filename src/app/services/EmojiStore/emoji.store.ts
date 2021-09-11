@@ -3,22 +3,25 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BehaviorSubjectItem } from 'src/app/helpers/BehaviorSubjectItem';
 import { EmojiList, Emoji } from 'src/types/Emoji';
+import { EmojiService } from '../EmojiService/emoji.service';
 
 // [x] TODO при нажатии на [*] эмоджи добавляется в список любимых и меняет иконку на более яркую
-// [ ] при обновлении страницы состояние списков должно сохранятся
+// [x] при обновлении страницы состояние списков должно сохранятся
 // [ ] при наведении на превью эмоджи должна всплывать полноразмераная картинка
 // [ ] рефакторинг стилей и кода
 
-interface EmojiState {
+export interface Emojis {
+  initial: EmojiList;
+  all: EmojiList;
+  favorite: EmojiList;
+  deleted: EmojiList;
+}
+
+export interface EmojiState {
   quantity: number;
   page: number;
   searchString: string;
-  emojis: {
-    initial: EmojiList;
-    all: EmojiList;
-    favorite: EmojiList;
-    deleted: EmojiList;
-  };
+  emojis: Emojis;
 }
 
 const EMOJI_INITIAL_STATE: EmojiState = {
@@ -38,6 +41,8 @@ const EMOJI_INITIAL_STATE: EmojiState = {
 })
 export class EmojiStore {
   private state = new BehaviorSubjectItem<EmojiState>(EMOJI_INITIAL_STATE);
+
+  constructor(private emojiService: EmojiService) {}
 
   allEmojis$: Observable<EmojiList> = this.state.value$.pipe(
     map((state) => state.emojis.all),
@@ -66,6 +71,23 @@ export class EmojiStore {
 
   initEmojis(data: EmojiList): void {
     const oldData = this.state.value;
+    const emojisFromLocalStorage =
+      this.emojiService.getEmojisFromLocalStorage();
+
+    if (
+      emojisFromLocalStorage &&
+      data.length === emojisFromLocalStorage.initial.length &&
+      data.every((emoji) =>
+        emojisFromLocalStorage.initial.find((item) => item.name === emoji.name)
+      )
+    ) {
+      this.state.value = {
+        ...oldData,
+        emojis: emojisFromLocalStorage,
+      };
+      return;
+    }
+
     this.state.value = {
       ...oldData,
       emojis: {
@@ -75,6 +97,8 @@ export class EmojiStore {
         favorite: [],
       },
     };
+
+    this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
   setAllEmojis(data: EmojiList): void {
@@ -128,34 +152,38 @@ export class EmojiStore {
   }
 
   likeEmoji(likedEmoji: Emoji): void {
-    likedEmoji.like();
+    likedEmoji.liked = true;
     this.state.value.emojis.favorite.push(likedEmoji);
+    this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
   unlikeEmoji(unlikedEmoji: Emoji): void {
     const { favorite: favoriteEmojis } = this.state.value.emojis;
-    unlikedEmoji.unlike();
+    unlikedEmoji.liked = false;
     this.setFavoriteEmojis(
       favoriteEmojis.filter((emoji) => unlikedEmoji !== emoji)
     );
+    this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
   deleteEmoji(deletedEmoji: Emoji): void {
     const { all: allEmojis } = this.state.value.emojis;
 
-    deletedEmoji.delete();
+    deletedEmoji.deleted = true;
     this.state.value.emojis.deleted.push(deletedEmoji);
     this.setAllEmojis(allEmojis.filter((emoji) => deletedEmoji !== emoji));
+    this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
   restoreEmoji(restoredEmoji: Emoji): void {
     const { deleted: deletedEmojis } = this.state.value.emojis;
 
-    restoredEmoji.restore();
+    restoredEmoji.deleted = false;
     this.state.value.emojis.all.push(restoredEmoji);
     this.setDeletedEmojis(
       deletedEmojis.filter((emoji) => restoredEmoji !== emoji)
     );
+    this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
   paginate(): (emojiList: EmojiList) => EmojiList {

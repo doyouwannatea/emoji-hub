@@ -13,22 +13,6 @@ export class Emoji implements EmojiItem {
     this.name = emojiItem.name;
     this.url = emojiItem.url;
   }
-
-  like() {
-    this.liked = true;
-  }
-
-  unlike() {
-    this.liked = false;
-  }
-
-  delete() {
-    this.deleted = true;
-  }
-
-  restore() {
-    this.deleted = false;
-  }
 }
 
 export type EmojiMap = Record<string, string>;
