@@ -5,6 +5,7 @@ import { map, catchError, delay } from 'rxjs/operators';
 import { BehaviorSubjectItem } from 'src/app/helpers/BehaviorSubjectItem';
 import { emojiMapToList } from 'src/app/helpers/emojiMapToList';
 import { mockEmojiMap } from 'src/app/mocks/mock-emoji-map';
+import { environment } from 'src/environments/environment';
 import { Emoji, EmojiList, EmojiMap } from 'src/types/Emoji';
 
 @Injectable({
@@ -19,28 +20,25 @@ export class EmojiService {
   }
 
   fetchEmojis(): Observable<EmojiList> {
-    // this.loading.value = true;
-    // const result$ = this.http
-    //   .get<EmojiMap>(this.emojisUrl)
-    //   .pipe(
-    //     catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
-    //     map(emojiMapToList)
-    //   );
-
-    // result$.subscribe(() => (this.loading.value = false));
-
-    // return result$;
-
     this.loading.value = true;
-    const result$ = of(mockEmojiMap).pipe(
-      delay(1000),
-      catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
-      map(emojiMapToList),
-      map((emojiList) => emojiList.map((emoji) => new Emoji(emoji)))
-    );
+    let result$: Observable<EmojiList>;
+
+    if (environment.mockEmojis) {
+      result$ = of(mockEmojiMap).pipe(
+        delay(1000),
+        catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
+        map(emojiMapToList),
+        map((emojiList) => emojiList.map((emoji) => new Emoji(emoji)))
+      );
+    } else {
+      result$ = this.http.get<EmojiMap>(this.emojisUrl).pipe(
+        catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
+        map(emojiMapToList),
+        map((emojiList) => emojiList.map((emoji) => new Emoji(emoji)))
+      );
+    }
 
     result$.subscribe(() => (this.loading.value = false));
-
     return result$;
   }
 
