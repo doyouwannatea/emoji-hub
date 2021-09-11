@@ -1,0 +1,5 @@
+<div class="search">
+  <input (ngModelChange)="changeSearchHandler($event)" [ngModel]="searchString$ | async" type="text"
+    class="search__input form-control" placeholder="type emoji name">
+  <button (click)="clearSearch()" *ngIf="searchString$ | async" class="search__delete-btn"></button>
+</div>

@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-2">
+    <app-navigation></app-navigation>
+  </div>
+
+  <div class="col">
+    <header class="header d-flex justify-content-between align-items-center">
+      <h3 class="title">{{ title }}</h3>
+      <app-search-input></app-search-input>
+    </header>
+
+    <div *ngIf="loading" class="loader">loading...</div>
+    <app-emoji-table [emojiList]="emojiList"></app-emoji-table>
+  </div>
+</div>
+
+<app-footer></app-footer>

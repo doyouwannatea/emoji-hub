@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { EmojiService } from 'src/app/services/EmojiService/emoji.service';
+import { EmojiStore } from 'src/app/services/EmojiStore/emoji.store';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'Hello world application';
+  title = 'EmojiHub';
+
+  constructor(
+    private emojiService: EmojiService,
+    private emojiStore: EmojiStore
+  ) {
+    emojiService.fetchEmojis().subscribe((data) => emojiStore.initEmojis(data));
+  }
 }

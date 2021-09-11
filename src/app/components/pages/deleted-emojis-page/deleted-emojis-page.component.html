@@ -1,0 +1,3 @@
+<app-emojis-page [title]="'Удалённые'" [loading]="emojiService.loading.value$ | async"
+  [emojiList]="emojiStore.deletedEmojis$ | async">
+</app-emojis-page>

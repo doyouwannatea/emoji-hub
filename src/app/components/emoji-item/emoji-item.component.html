@@ -1,9 +1,0 @@
-<div class="emoji" [class.emoji--selected]="selected" *ngIf="emoji">
-  <h2 class="emoji__name">{{ emoji.name }}</h2>
-  <span class="emoji__url">{{ emoji.url }}</span>
-  <div class="emoji__actions">
-    <button>X</button>
-    <button>*</button>
-    <a routerLink="/details/{{ emoji.name }}">to details page</a>
-  </div>
-</div>

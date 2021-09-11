@@ -1,0 +1,39 @@
+<div *ngIf="emojiList" class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>имя</th>
+        <th>ссылка</th>
+        <th>превью</th>
+        <th>действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emoji of emojiList">
+        <th>{{ emoji.name }}</th>
+        <td>
+          <a [href]="emoji.url" target="_blank">{{ emoji.url }}</a>
+        </td>
+        <td>
+          <img [class.liked]="emoji.liked" [src]="emoji.url" alt="" class="table__preview mr-2">
+        </td>
+        <td>
+          <div *ngIf="!emoji.liked && !emoji.deleted">
+            <button (click)="emojiStore.deleteEmoji(emoji)" class="btn btn-primary">x</button>
+            <button (click)="emojiStore.likeEmoji(emoji)" class="btn btn-primary">*</button>
+          </div>
+
+          <div *ngIf="emoji.liked">
+            <button (click)="emojiStore.unlikeEmoji(emoji)" class="btn btn-primary">x</button>
+          </div>
+
+          <div *ngIf="emoji.deleted">
+            <button (click)="emojiStore.restoreEmoji(emoji)" class="btn btn-primary">восстановить</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-table-pagination></app-table-pagination>

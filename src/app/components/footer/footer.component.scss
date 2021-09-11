@@ -1,0 +1,24 @@
+.footer {
+  margin-top: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__text-content,
+  &__link {
+    font-size: 14px;
+    color: inherit;
+    opacity: 0.8;
+  }
+
+  &__link {
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}

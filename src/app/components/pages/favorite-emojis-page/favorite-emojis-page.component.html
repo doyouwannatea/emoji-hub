@@ -1,0 +1,3 @@
+<app-emojis-page [title]="'Любимые'" [loading]="emojiService.loading.value$ | async"
+  [emojiList]="emojiStore.favoriteEmojis$ | async">
+</app-emojis-page>

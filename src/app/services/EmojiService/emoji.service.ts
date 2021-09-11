@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, delay } from 'rxjs/operators';
+import { BehaviorSubjectItem } from 'src/app/helpers/BehaviorSubjectItem';
 import { emojiMapToList } from 'src/app/helpers/emojiMapToList';
 import { mockEmojiMap } from 'src/app/mocks/mock-emoji-map';
 import { Emoji, EmojiList, EmojiMap } from 'src/types/Emoji';
@@ -11,27 +12,36 @@ import { Emoji, EmojiList, EmojiMap } from 'src/types/Emoji';
 })
 export class EmojiService {
   private emojisUrl = 'https://api.github.com/emojis';
+  loading = new BehaviorSubjectItem(false);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.fetchEmojis();
+  }
 
   fetchEmojis(): Observable<EmojiList> {
-    return this.http
-      .get<EmojiMap>(this.emojisUrl)
-      .pipe(
-        catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
-        map(emojiMapToList)
-      );
-  }
+    // this.loading.value = true;
+    // const result$ = this.http
+    //   .get<EmojiMap>(this.emojisUrl)
+    //   .pipe(
+    //     catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
+    //     map(emojiMapToList)
+    //   );
 
-  getEmojis(): Observable<EmojiList> {
-    const emojis = of(emojiMapToList(mockEmojiMap));
-    return emojis;
-  }
+    // result$.subscribe(() => (this.loading.value = false));
 
-  getSelectedEmoji(name: string | null): Observable<Emoji | undefined> {
-    const emojis = emojiMapToList(mockEmojiMap);
-    const foundEmoji = of(emojis.find((emoji) => emoji.name === name));
-    return foundEmoji;
+    // return result$;
+
+    this.loading.value = true;
+    const result$ = of(mockEmojiMap).pipe(
+      delay(1000),
+      catchError(this.handleError<EmojiMap>('fetchEmojis', {})),
+      map(emojiMapToList),
+      map((emojiList) => emojiList.map((emoji) => new Emoji(emoji)))
+    );
+
+    result$.subscribe(() => (this.loading.value = false));
+
+    return result$;
   }
 
   /**
@@ -42,13 +52,8 @@ export class EmojiService {
    */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
       console.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }

@@ -1,0 +1,3 @@
+<app-emojis-page [title]="'Все'" [loading]="emojiService.loading.value$ | async"
+  [emojiList]="emojiStore.allEmojis$ | async">
+</app-emojis-page>

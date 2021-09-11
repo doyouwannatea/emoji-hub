@@ -1,0 +1,34 @@
+$link-icon-size: 1rem;
+$link-icon-spacing: 0.5rem;
+$icon-margin-left: 0.3rem;
+$links-spacing: 0.2rem;
+
+.navigation {
+  top: 10px;
+  position: sticky;
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: $links-spacing;
+    }
+  }
+  &__link {
+    background: $icon-margin-left center no-repeat;
+    padding-left: $link-icon-size + $link-icon-spacing + $icon-margin-left;
+
+    &:hover,
+    &:focus-visible {
+      background-color: #f0f0f0;
+    }
+
+    &--all {
+      background-image: url(../../../assets/icons/fa-solid_icons.svg);
+    }
+    &--like {
+      background-image: url(../../../assets/icons/ant-design_like-filled.svg);
+    }
+    &--delete {
+      background-image: url(../../../assets/icons/fluent_delete-20-filled.svg);
+    }
+  }
+}

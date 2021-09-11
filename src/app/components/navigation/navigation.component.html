@@ -1,0 +1,18 @@
+<nav class="navigation">
+  <ul class="navigation__list nav flex-column">
+    <li class="navigation__item nav-item">
+      <a routerLink="/all" [class.disabled]="activeTab === 'all'"
+        class="navigation__link navigation__link--all nav-link">Все</a>
+    </li>
+    <li class="navigation__item nav-item">
+      <a routerLink="/favorite" [class.disabled]="activeTab === 'favorite'"
+        class="navigation__link navigation__link--like nav-link">Любимые</a>
+    </li>
+    <li class="navigation__item nav-item">
+      <a routerLink="/deleted" [class.disabled]="activeTab === 'deleted'"
+        class="navigation__link navigation__link--delete nav-link">
+        Удалённые
+      </a>
+    </li>
+  </ul>
+</nav>
