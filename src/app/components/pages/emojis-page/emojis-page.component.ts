@@ -5,7 +5,6 @@ import { EmojiList } from 'src/types/Emoji';
 @Component({
   selector: 'app-emojis-page',
   templateUrl: './emojis-page.component.html',
-  styleUrls: ['./emojis-page.component.scss'],
 })
 export class EmojisPageComponent {
   @Input() emojiList: EmojiList | null = [];

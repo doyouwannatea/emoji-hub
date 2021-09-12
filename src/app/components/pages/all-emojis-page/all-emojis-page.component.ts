@@ -3,8 +3,12 @@ import { EmojiStore } from 'src/app/services/EmojiStore/emoji.store';
 
 @Component({
   selector: 'app-all-emojis-page',
-  templateUrl: './all-emojis-page.component.html',
-  styleUrls: ['./all-emojis-page.component.scss'],
+  template: `
+    <app-emojis-page
+      [title]="'Все'"
+      [emojiList]="emojiStore.allEmojis$ | async"
+    ></app-emojis-page>
+  `,
 })
 export class AllEmojisPageComponent {
   constructor(public emojiStore: EmojiStore) {}
