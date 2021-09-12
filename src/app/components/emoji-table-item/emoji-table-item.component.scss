@@ -19,7 +19,8 @@ $liked-color: #d8ffd9;
     box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
   }
 
-  td {
+  td,
+  th {
     overflow-wrap: break-word;
   }
 
