@@ -1,51 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BehaviorSubjectItem } from 'src/app/helpers/BehaviorSubjectItem';
 import { EmojiList, Emoji } from 'src/types/Emoji';
 import { EmojiService } from '../EmojiService/emoji.service';
-
-export interface Emojis {
-  initial: EmojiList;
-  all: EmojiList;
-  favorite: EmojiList;
-  deleted: EmojiList;
-}
-
-export interface EmojiState {
-  disablePagination: boolean;
-  quantity: number;
-  page: number;
-  searchString: string;
-  emojis: Emojis;
-}
-
-const EMOJI_INITIAL_STATE: EmojiState = {
-  disablePagination: false,
-  page: 1,
-  quantity: 5,
-  searchString: '',
-  emojis: {
-    initial: [],
-    all: [],
-    deleted: [],
-    favorite: [],
-  },
-};
+import { EmojiState, IEmojiState } from './EmojiState';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmojiStore {
-  private state = new BehaviorSubjectItem<EmojiState>(EMOJI_INITIAL_STATE);
-
+  private state = new BehaviorSubjectItem<IEmojiState>(new EmojiState());
   constructor(private emojiService: EmojiService) {}
 
   allEmojis$: Observable<EmojiList> = this.state.value$.pipe(
     map((state) => state.emojis.all),
     map(this.search()),
     map(this.sort()),
-    tap(this.togglePagination()),
     map(this.paginate())
   );
 
@@ -53,7 +24,6 @@ export class EmojiStore {
     map((state) => state.emojis.favorite),
     map(this.search()),
     map(this.sort()),
-    tap(this.togglePagination()),
     map(this.paginate())
   );
 
@@ -61,7 +31,6 @@ export class EmojiStore {
     map((state) => state.emojis.deleted),
     map(this.search()),
     map(this.sort()),
-    tap(this.togglePagination()),
     map(this.paginate())
   );
 
@@ -75,6 +44,9 @@ export class EmojiStore {
 
   initEmojis(data: EmojiList): void {
     const oldData = this.state.value;
+    const newState = new EmojiState(oldData)
+      .setInitialEmojis(data)
+      .setAllEmojis(data);
     const emojisFromLocalStorage =
       this.emojiService.getEmojisFromLocalStorage();
 
@@ -85,74 +57,36 @@ export class EmojiStore {
         emojisFromLocalStorage.initial.find((item) => item.name === emoji.name)
       )
     ) {
-      this.state.value = {
-        ...oldData,
-        emojis: emojisFromLocalStorage,
-      };
-      return;
+      newState.setEmojis(emojisFromLocalStorage);
     }
 
-    this.state.value = {
-      ...oldData,
-      emojis: {
-        initial: data,
-        all: [...data],
-        deleted: [],
-        favorite: [],
-      },
-    };
-
+    this.state.value = newState;
     this.emojiService.saveEmojisToLocalStorage(this.state.value.emojis);
   }
 
   setAllEmojis(data: EmojiList): void {
     const oldData = this.state.value;
-    this.state.value = {
-      ...oldData,
-      emojis: {
-        ...oldData.emojis,
-        all: data,
-      },
-    };
+    this.state.value = new EmojiState(oldData).setAllEmojis(data);
   }
 
   setFavoriteEmojis(data: EmojiList): void {
     const oldData = this.state.value;
-    this.state.value = {
-      ...oldData,
-      emojis: {
-        ...oldData.emojis,
-        favorite: data,
-      },
-    };
+    this.state.value = new EmojiState(oldData).setFavoriteEmojis(data);
   }
 
   setDeletedEmojis(data: EmojiList): void {
     const oldData = this.state.value;
-    this.state.value = {
-      ...oldData,
-      emojis: {
-        ...oldData.emojis,
-        deleted: data,
-      },
-    };
+    this.state.value = new EmojiState(oldData).setDeletedEmojis(data);
   }
 
   setSearchString(data: string): void {
     const oldData = this.state.value;
-    this.state.value = {
-      ...oldData,
-      searchString: data,
-    };
+    this.state.value = new EmojiState(oldData).setSearchString(data);
   }
 
   increaseEmojisOnPage() {
-    const INCREASE_AMOUNT = 5;
     const oldData = this.state.value;
-    this.state.value = {
-      ...oldData,
-      quantity: oldData.quantity + INCREASE_AMOUNT,
-    };
+    this.state.value = new EmojiState(oldData).increaseEmojisOnPage();
   }
 
   likeEmoji(likedEmoji: Emoji): void {
@@ -197,14 +131,9 @@ export class EmojiStore {
   paginate(): (emojiList: EmojiList) => EmojiList {
     return (emojiList) => {
       const { page, quantity } = this.state.value;
-      return emojiList.slice((page - 1) * quantity, page * quantity);
-    };
-  }
 
-  togglePagination(): (emojiList: EmojiList) => void {
-    return (emojiList) => {
-      const { page, quantity } = this.state.value;
       this.state.value.disablePagination = emojiList.length <= page * quantity;
+      return emojiList.slice((page - 1) * quantity, page * quantity);
     };
   }
 

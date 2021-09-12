@@ -7,7 +7,7 @@ import { emojiMapToList } from 'src/app/helpers/emojiMapToList';
 import { mockEmojiMap } from 'src/app/mocks/mock-emoji-map';
 import { environment } from 'src/environments/environment';
 import { Emoji, EmojiList, EmojiMap } from 'src/types/Emoji';
-import { Emojis } from '../EmojiStore/emoji.store';
+import { Emojis } from '../EmojiStore/EmojiState';
 
 @Injectable({
   providedIn: 'root',
