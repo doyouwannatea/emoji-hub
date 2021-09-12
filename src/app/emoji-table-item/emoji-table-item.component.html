@@ -1,0 +1,36 @@
+<tr *ngIf="emoji" [class.table-row--liked]="emoji.liked" class="table-row">
+  <th>{{ emoji.name }}</th>
+  <td>
+    <a [href]="emoji.url" target="_blank">{{ emoji.url }}</a>
+  </td>
+  <td>
+    <ng-template #tipContent>
+      <img [src]="emoji.url" class="table-row__preview table-row__preview--full" alt="">
+    </ng-template>
+    <img [ngbTooltip]="tipContent" tooltipClass="image-tooltip" [src]="emoji.url" alt="" class="table-row__preview">
+  </td>
+  <td>
+    <div *ngIf="!emoji.liked && !emoji.deleted" class="d-flex gap-1 flex-wrap">
+      <button title="delete" (click)="emojiStore.deleteEmoji(emoji)"
+        class="table-row__btn btn btn-outline-secondary btn-sm flex-grow-1">
+        <span class="icon" style="background-image: url(../../../assets/icons/trash.svg);"></span>
+      </button>
+      <button title="like" (click)="emojiStore.likeEmoji(emoji)"
+        class="table-row__btn btn btn-outline-secondary btn-sm flex-grow-1">
+        <span class="icon" style="background-image: url(../../../assets/icons/like.svg);"></span>
+      </button>
+    </div>
+
+    <div *ngIf="emoji.liked">
+      <button title="unlike" (click)="emojiStore.unlikeEmoji(emoji)"
+        class="d-flex justify-content-center btn btn-outline-secondary btn-sm w-100">
+        <span class="icon" style="background-image: url(../../../assets/icons/unlike.svg);"></span>
+      </button>
+    </div>
+
+    <div *ngIf="emoji.deleted">
+      <button (click)="emojiStore.restoreEmoji(emoji)"
+        class="btn btn-outline-success btn-sm w-100">восстановить</button>
+    </div>
+  </td>
+</tr>
