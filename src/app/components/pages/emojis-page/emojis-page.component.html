@@ -21,7 +21,8 @@
       </div>
     </div>
 
-    <app-emoji-table *ngIf="!(emojiService.loading.value$ | async) && !(emojiService.error.value$ | async)"
+    <app-emoji-table
+      *ngIf="(emojiService.loading.value$ | async) === false && (emojiService.error.value$ | async) === false"
       [emojiList]="emojiList"></app-emoji-table>
   </div>
 </div>
