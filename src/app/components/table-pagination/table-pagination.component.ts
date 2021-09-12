@@ -6,6 +6,7 @@ import { EmojiStore } from 'src/app/services/EmojiStore/emoji.store';
   template: `
     <div class="text-end mt-3">
       <button
+        [disabled]="emojiStore.disablePagination$ | async"
         (click)="emojiStore.increaseEmojisOnPage()"
         class="btn btn-secondary btn-sm"
       >

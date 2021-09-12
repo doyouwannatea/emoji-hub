@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { BehaviorSubjectItem } from 'src/app/helpers/BehaviorSubjectItem';
 import { EmojiList, Emoji } from 'src/types/Emoji';
 import { EmojiService } from '../EmojiService/emoji.service';
@@ -13,6 +13,7 @@ export interface Emojis {
 }
 
 export interface EmojiState {
+  disablePagination: boolean;
   quantity: number;
   page: number;
   searchString: string;
@@ -20,6 +21,7 @@ export interface EmojiState {
 }
 
 const EMOJI_INITIAL_STATE: EmojiState = {
+  disablePagination: false,
   page: 1,
   quantity: 5,
   searchString: '',
@@ -43,6 +45,7 @@ export class EmojiStore {
     map((state) => state.emojis.all),
     map(this.search()),
     map(this.sort()),
+    tap(this.togglePagination()),
     map(this.paginate())
   );
 
@@ -50,6 +53,7 @@ export class EmojiStore {
     map((state) => state.emojis.favorite),
     map(this.search()),
     map(this.sort()),
+    tap(this.togglePagination()),
     map(this.paginate())
   );
 
@@ -57,11 +61,16 @@ export class EmojiStore {
     map((state) => state.emojis.deleted),
     map(this.search()),
     map(this.sort()),
+    tap(this.togglePagination()),
     map(this.paginate())
   );
 
   searchString$: Observable<string> = this.state.value$.pipe(
     map((state) => state.searchString.trim())
+  );
+
+  disablePagination$: Observable<boolean> = this.state.value$.pipe(
+    map((state) => state.disablePagination)
   );
 
   initEmojis(data: EmojiList): void {
@@ -189,6 +198,13 @@ export class EmojiStore {
     return (emojiList) => {
       const { page, quantity } = this.state.value;
       return emojiList.slice((page - 1) * quantity, page * quantity);
+    };
+  }
+
+  togglePagination(): (emojiList: EmojiList) => void {
+    return (emojiList) => {
+      const { page, quantity } = this.state.value;
+      this.state.value.disablePagination = emojiList.length <= page * quantity;
     };
   }
 
