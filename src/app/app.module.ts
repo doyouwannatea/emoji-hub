@@ -16,7 +16,7 @@ import { AppRoutingModule } from './modules/app-routing.module';
 import { EmojisPageComponent } from './components/pages/emojis-page/emojis-page.component';
 import { FavoriteEmojisPageComponent } from './components/pages/favorite-emojis-page/favorite-emojis-page.component';
 import { DeletedEmojisPageComponent } from './components/pages/deleted-emojis-page/deleted-emojis-page.component';
-import { EmojiTableItemComponent } from './emoji-table-item/emoji-table-item.component';
+import { EmojiTableItemComponent } from './components/emoji-table-item/emoji-table-item.component';
 
 @NgModule({
   declarations: [

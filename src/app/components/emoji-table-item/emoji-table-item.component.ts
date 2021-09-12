@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Emoji } from 'src/types/Emoji';
-import { EmojiStore } from '../services/EmojiStore/emoji.store';
+import { EmojiStore } from '../../services/EmojiStore/emoji.store';
 
 @Component({
   selector: 'app-emoji-table-item',
