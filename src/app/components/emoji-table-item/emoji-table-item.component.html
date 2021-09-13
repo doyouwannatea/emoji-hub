@@ -13,18 +13,18 @@
     <div *ngIf="!emoji.liked && !emoji.deleted" class="d-flex gap-1 flex-wrap">
       <button title="delete" (click)="emojiStore.deleteEmoji(emoji)"
         class="table-row__btn btn btn-outline-secondary btn-sm flex-grow-1">
-        <span class="icon" style="background-image: url(../../../assets/icons/trash.svg);"></span>
+        <span class="icon icon--trash"></span>
       </button>
       <button title="like" (click)="emojiStore.likeEmoji(emoji)"
         class="table-row__btn btn btn-outline-secondary btn-sm flex-grow-1">
-        <span class="icon" style="background-image: url(../../../assets/icons/like.svg);"></span>
+        <span class="icon icon--like"></span>
       </button>
     </div>
 
     <div *ngIf="emoji.liked">
       <button title="unlike" (click)="emojiStore.unlikeEmoji(emoji)"
         class="d-flex justify-content-center btn btn-outline-secondary btn-sm w-100">
-        <span class="icon" style="background-image: url(../../../assets/icons/unlike.svg);"></span>
+        <span class="icon icon--unlike"></span>
       </button>
     </div>
 

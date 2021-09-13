@@ -61,4 +61,14 @@ $liked-color: #d8ffd9;
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
+
+  &--like {
+    background-image: url(../../../assets/icons/like.svg);
+  }
+  &--unlike {
+    background-image: url(../../../assets/icons/unlike.svg);
+  }
+  &--trash {
+    background-image: url(../../../assets/icons/trash.svg);
+  }
 }
